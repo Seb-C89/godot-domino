@@ -1,18 +1,32 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://mod/domino/Number_Blocks_01_Image.png" type="Texture" id=1]
 [ext_resource path="res://mod/domino/domino.obj" type="ArrayMesh" id=2]
 [ext_resource path="res://mod/domino/face.obj" type="ArrayMesh" id=3]
+[ext_resource path="res://scn/domino.gd" type="Script" id=4]
 
 [sub_resource type="SpatialMaterial" id=1]
 albedo_texture = ExtResource( 1 )
 uv1_scale = Vector3( 0.1, 0.32, 1 )
 uv1_offset = Vector3( 0, -0.12, 0 )
 
+[sub_resource type="BoxShape" id=2]
+extents = Vector3( 0.593027, 0.0374324, 1 )
+
 [node name="domino" type="MeshInstance"]
 mesh = ExtResource( 2 )
 material/0 = null
+script = ExtResource( 4 )
 
 [node name="face" type="MeshInstance" parent="."]
 mesh = ExtResource( 3 )
 material/0 = SubResource( 1 )
+
+[node name="Area" type="Area" parent="."]
+
+[node name="CollisionShape" type="CollisionShape" parent="Area"]
+shape = SubResource( 2 )
+
+[connection signal="input_event" from="Area" to="." method="_on_Area_input_event"]
+[connection signal="mouse_entered" from="Area" to="." method="_on_Area_mouse_entered"]
+[connection signal="mouse_exited" from="Area" to="." method="_on_Area_mouse_exited"]
