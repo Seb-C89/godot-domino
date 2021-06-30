@@ -1,0 +1,18 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://mod/domino/Number_Blocks_01_Image.png" type="Texture" id=1]
+[ext_resource path="res://mod/domino/domino.obj" type="ArrayMesh" id=2]
+[ext_resource path="res://mod/domino/face.obj" type="ArrayMesh" id=3]
+
+[sub_resource type="SpatialMaterial" id=1]
+albedo_texture = ExtResource( 1 )
+uv1_scale = Vector3( 0.1, 0.32, 1 )
+uv1_offset = Vector3( 0, -0.12, 0 )
+
+[node name="domino" type="MeshInstance"]
+mesh = ExtResource( 2 )
+material/0 = null
+
+[node name="face" type="MeshInstance" parent="."]
+mesh = ExtResource( 3 )
+material/0 = SubResource( 1 )

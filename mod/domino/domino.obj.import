@@ -1,0 +1,19 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/domino.obj-a337fd5c3392d00e27d12e6bb8c59bca.mesh"
+
+[deps]
+
+files=[ "res://.import/domino.obj-a337fd5c3392d00e27d12e6bb8c59bca.mesh" ]
+
+source_file="res://mod/domino/domino.obj"
+dest_files=[ "res://.import/domino.obj-a337fd5c3392d00e27d12e6bb8c59bca.mesh", "res://.import/domino.obj-a337fd5c3392d00e27d12e6bb8c59bca.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )
+offset_mesh=Vector3( 0, 0, 0 )
+optimize_mesh=true

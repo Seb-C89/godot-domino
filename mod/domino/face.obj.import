@@ -1,0 +1,19 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/face.obj-25a8acbf75e0cf74e54a7b7f59f5fcc3.mesh"
+
+[deps]
+
+files=[ "res://.import/face.obj-25a8acbf75e0cf74e54a7b7f59f5fcc3.mesh" ]
+
+source_file="res://mod/domino/face.obj"
+dest_files=[ "res://.import/face.obj-25a8acbf75e0cf74e54a7b7f59f5fcc3.mesh", "res://.import/face.obj-25a8acbf75e0cf74e54a7b7f59f5fcc3.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )
+offset_mesh=Vector3( 0, 0, 0 )
+optimize_mesh=true
