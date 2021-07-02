@@ -27,5 +27,7 @@ material/0 = SubResource( 1 )
 [node name="CollisionShape" type="CollisionShape" parent="Area"]
 shape = SubResource( 2 )
 
+[node name="Tween" type="Tween" parent="."]
+
 [connection signal="mouse_entered" from="Area" to="." method="_on_Area_mouse_entered"]
 [connection signal="mouse_exited" from="Area" to="." method="_on_Area_mouse_exited"]
