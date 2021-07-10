@@ -1,4 +1,4 @@
-extends MeshInstance
+extends Spatial
 
 
 var __status = 1 #face visible (1) / face hidden (-1)
@@ -35,9 +35,9 @@ func _on_Area_input_event(camera, event, click_position, click_normal, shape_idx
 
 func flip():
 	if __status == 1:
-		$Tween.interpolate_property($".", "rotation_degrees", null, Vector3(0, 0, 180), 0.25)
+		$Tween.interpolate_property($mesh_domino, "rotation_degrees", null, Vector3(0, 0, 180), 0.25)
 	elif __status == -1:
-		$Tween.interpolate_property($".", "rotation_degrees", null, Vector3(0, 0, 0), 0.25) # vers la gauche
-#		$Tween.interpolate_property($".", "rotation_degrees", Vector3(0, 0, -180), Vector3(0, 0, 0), 0.25) # vers la droite
+		$Tween.interpolate_property($mesh_domino, "rotation_degrees", null, Vector3(0, 0, 0), 0.25) # vers la gauche
+#		$Tween.interpolate_property($mesh_domino, "rotation_degrees", Vector3(0, 0, -180), Vector3(0, 0, 0), 0.25) # vers la droite
 	$Tween.start()
 	__status *= -1

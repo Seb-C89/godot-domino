@@ -13,12 +13,15 @@ uv1_offset = Vector3( 0, -0.12, 0 )
 [sub_resource type="BoxShape" id=2]
 extents = Vector3( 0.593027, 0.0374324, 1 )
 
-[node name="domino" type="MeshInstance"]
-mesh = ExtResource( 2 )
-material/0 = null
+[node name="Domino" type="Spatial"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0 )
 script = ExtResource( 4 )
 
-[node name="face" type="MeshInstance" parent="."]
+[node name="mesh_domino" type="MeshInstance" parent="."]
+mesh = ExtResource( 2 )
+material/0 = null
+
+[node name="mesh_face" type="MeshInstance" parent="mesh_domino"]
 mesh = ExtResource( 3 )
 material/0 = SubResource( 1 )
 
