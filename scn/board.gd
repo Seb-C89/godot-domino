@@ -1,14 +1,31 @@
 extends Spatial
 
 
-var __rows = 5
-var __cols = 9
+var __rows = 0
+var __cols = 0
 var __board = []
-var __tiles_offset = 0.1
+var __tiles_offset = 0
+var __alea = []
+
+
+func init(rows, cols, tile_offset, alea):
+	__rows = rows
+	__cols = cols
+	__tiles_offset = tile_offset
+	__alea = alea
+	generate()
 
 
 # Called when the node enters the domino_scn tree for the first time.
 func _ready():
+	pass
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+#func _process(delta):
+#	pass
+
+
+func generate():
 	var domino_pack = preload("res://scn/domino.tscn")
 #	var domino_scn = domino_pack.instance()
 	
@@ -35,7 +52,7 @@ func _ready():
 			#Duplique material (else all instance share same params like uv_coord, color, ...)
 			__board[rowID][colID].get_node("mesh_domino/mesh_face").set_surface_material(0, __board[0][0].get_node("mesh_domino/mesh_face").get_surface_material(0).duplicate())
 			#Set_face()
-			__board[rowID][colID].set_face(rowID+colID)
+			__board[rowID][colID].set_face(__alea[rowID+colID])
 	
 #	https://discord.com/channels/667748228212457482/677940032535003136/861790618799702016
 #	domino_pack = preload("res://scn/domino.tscn")
@@ -46,7 +63,3 @@ func _ready():
 #	add_child(domino_scn)
 #	print("mesh size after add", domino_scn.get_node("mesh_domino").get_transformed_aabb().size)
 #	NODE MUST BA ADDED TO SCENE TREE BEFORE .get_transformed_aabb()
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
