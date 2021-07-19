@@ -1,11 +1,11 @@
 extends Spatial
 
-
 var __rows = 0
 var __cols = 0
 var __board = []
 var __tiles_offset = 0
 var __alea = []
+var __board_size = 0
 
 
 func init(rows, cols, tile_offset, alea):
@@ -53,6 +53,11 @@ func generate():
 			__board[rowID][colID].get_node("mesh_domino/mesh_face").set_surface_material(0, __board[0][0].get_node("mesh_domino/mesh_face").get_surface_material(0).duplicate())
 			#Set_face()
 			__board[rowID][colID].set_face(__alea[rowID+colID])
+	
+	__board_size = __board[__rows-1][__cols-1].get_node("mesh_domino").get_transformed_aabb().end - __board[0][0].get_node("mesh_domino").get_transformed_aabb().position
+	print("board", __board_size)
+	print("mesh", mesh_size)
+	print("cols", __cols, "rows", __rows)
 	
 #	https://discord.com/channels/667748228212457482/677940032535003136/861790618799702016
 #	domino_pack = preload("res://scn/domino.tscn")
