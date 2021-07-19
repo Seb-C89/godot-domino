@@ -30,10 +30,10 @@ func generate():
 #	var domino_scn = domino_pack.instance()
 	
 	#Allocation
-	__board.resize(5)
+	__board.resize(__rows)
 	for rowID in len(__board):
 		__board[rowID] = []
-		__board[rowID].resize(9)
+		__board[rowID].resize(__cols)
 	
 	#Generate all domino
 	for rowID in len(__board): # for rowID, row in enumarate(board):
