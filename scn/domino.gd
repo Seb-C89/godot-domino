@@ -23,12 +23,12 @@ func set_face(face):
 
 func _on_Area_mouse_entered():
 	print("entered")
-	$Area.connect("input_event", self, "_on_Area_input_event")
+#	$Area.connect("input_event", self, "_on_Area_input_event")
 
 
 func _on_Area_mouse_exited():
 	print("exited")
-	$Area.disconnect("input_event", self, "_on_Area_input_event")
+#	$Area.disconnect("input_event", self, "_on_Area_input_event")
 
 
 func _on_Area_input_event(camera, event, click_position, click_normal, shape_idx):
