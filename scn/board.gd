@@ -53,11 +53,20 @@ func generate():
 			__board[rowID][colID].get_node("mesh_domino/mesh_face").set_surface_material(0, __board[0][0].get_node("mesh_domino/mesh_face").get_surface_material(0).duplicate())
 			#Set_face()
 			__board[rowID][colID].set_face(__alea[rowID+colID])
+			#Connect input event
+			__board[rowID][colID].get_node("Area").connect("input_event", self, "on_Domino_input_event", [rowID, colID])
 	
 	__board_size = __board[__rows-1][__cols-1].get_node("mesh_domino").get_transformed_aabb().end - __board[0][0].get_node("mesh_domino").get_transformed_aabb().position
 	print("board", __board_size)
 	print("mesh", mesh_size)
 	print("cols", __cols, "rows", __rows)
+	
+	
+func on_Domino_input_event(camera, event, click_position, click_normal, shape_idx, rowID, colID):
+	if event is InputEventMouseButton:
+		if event.doubleclick:
+			__board[rowID][colID].flip()
+	
 	
 #	https://discord.com/channels/667748228212457482/677940032535003136/861790618799702016
 #	domino_pack = preload("res://scn/domino.tscn")
