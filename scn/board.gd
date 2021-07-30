@@ -1,11 +1,18 @@
 extends Spatial
 
+
+signal chain_grow(chain)
+signal chain_lost(chain)
+
+
 var __rows = 0
 var __cols = 0
 var __board = []
 var __tiles_offset = 0
 var __alea = []
 var __board_size = 0
+
+var chain = []
 
 
 func init(rows, cols, tile_offset, alea):
@@ -19,6 +26,7 @@ func init(rows, cols, tile_offset, alea):
 # Called when the node enters the domino_scn tree for the first time.
 func _ready():
 	pass
+
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
@@ -60,14 +68,37 @@ func generate():
 	print("board", __board_size)
 	print("mesh", mesh_size)
 	print("cols", __cols, "rows", __rows)
-	
-	
+
+
 func on_Domino_input_event(camera, event, click_position, click_normal, shape_idx, rowID, colID):
 	if event is InputEventMouseButton:
 		if event.doubleclick:
+			print("face", __board[rowID][colID].__face)
 			__board[rowID][colID].flip()
-	
-	
+			chain_add(rowID, colID)
+
+
+func chain_add(rowID, colID):
+	if chain.size() > 0:
+		print(chain.front().__face, __board[rowID][colID].__face)
+		if chain.front().__face == __board[rowID][colID].__face:
+			chain.append(__board[rowID][colID])
+			emit_signal("chain_grow", chain)
+			print("chain x", chain.size())
+		else:
+			chain.clear()
+			emit_signal("chain_lost", chain)
+#			chain.append(__board[rowID][colID]) # When the chain is lost the last domino is hided ? Or it start a new chain ?
+#			emit_signal("chain_grow", chain)
+			print("chain lost")
+	else:
+		print("first")
+		chain.append(__board[rowID][colID])
+		emit_signal("chain_grow", chain)
+
+#	TODO chain as class ?
+
+
 #	https://discord.com/channels/667748228212457482/677940032535003136/861790618799702016
 #	domino_pack = preload("res://scn/domino.tscn")
 #	var domino_scn = domino_pack.instance()
