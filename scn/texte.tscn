@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://442-4427020_enter-image-description-here-font-sprite-sheet.jpg" type="Texture" id=1]
+[ext_resource path="res://scn/texte.gd" type="Script" id=2]
+
+[node name="Texte" type="Spatial"]
+script = ExtResource( 2 )
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+visible = false
+centered = false
+texture = ExtResource( 1 )
+hframes = 16
+vframes = 6
+frame = 24
+region_enabled = true
+region_rect = Rect2( 10, 40, 800, 300 )
