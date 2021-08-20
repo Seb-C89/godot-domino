@@ -8,13 +8,18 @@ extends Spatial
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	randomize()
-	var r = []
-	r.resize(50)
-	for i in len(r):
-		r[i] = randi()%10
-	print(r)
-	get_node("Board").init(4, 5, 0.1, r)
+	var rng = RandomNumberGenerator.new()
+	rng.randomize()
+	
+	#Player 2
+	#var rng2 = RandomNumberGenerator.new()
+	#rng2.seed = rng.seed
+
+	get_node("Board").init(4, 5, 0.1, rng)
+	
+#	get_node("Texte").set_text("Sebastien")
+#	get_node("Texte").update_text("AbCd")
+#	get_node("Texte").set_text("854263")
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

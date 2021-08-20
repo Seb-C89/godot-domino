@@ -9,9 +9,9 @@ var __rows = 0
 var __cols = 0
 var __board = []
 var __tiles_offset = 0
-var __alea = []
+var __alea = null
 var __board_size = 0
-var __domino_size
+var __domino_size = 0
 
 var chain = []
 
@@ -61,7 +61,7 @@ func generate():
 			#Duplique material (else all instance share same params like uv_coord, color, ...)
 			__board[rowID][colID].get_node("mesh_domino/mesh_face").set_surface_material(0, __board[0][0].get_node("mesh_domino/mesh_face").get_surface_material(0).duplicate())
 			#Set_face()
-			__board[rowID][colID].set_face(__alea[rowID+colID])
+			__board[rowID][colID].set_face(__alea.randi_range(0, 9))
 			#Connect input event
 #			__board[rowID][colID].get_node("Area").connect("input_event", self, "on_Domino_input_event", [rowID, colID])
 			__board[rowID][colID].get_node("Area").connect("input_event", self, "on_Domino_input_event", [__board[rowID][colID]])
