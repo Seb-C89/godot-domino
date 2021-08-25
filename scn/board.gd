@@ -76,17 +76,16 @@ func generate():
 func on_Domino_input_event(camera, event, click_position, click_normal, shape_idx, domino):
 	if event is InputEventMouseButton:
 		if event.doubleclick:
-#			print("face", __board[rowID][colID].__face)
 			get_domino_index_from_position(domino)
-#			__board[rowID][colID].flip()
-#			chain_add(rowID, colID)
+			domino.flip()
+			chain_add(domino)
 
 
-func chain_add(rowID, colID):
+func chain_add(domino):
 	if chain.size() > 0:
-		print(chain.front().__face, __board[rowID][colID].__face)
-		if chain.front().__face == __board[rowID][colID].__face:
-			chain.append(__board[rowID][colID])
+		print(chain.front().__face, domino.__face)
+		if chain.front().__face == domino.__face:
+			chain.append(domino)
 			emit_signal("chain_grow", chain)
 			print("chain x", chain.size())
 		else:
@@ -97,7 +96,7 @@ func chain_add(rowID, colID):
 			print("chain lost")
 	else:
 		print("first")
-		chain.append(__board[rowID][colID])
+		chain.append(domino)
 		emit_signal("chain_grow", chain)
 
 
