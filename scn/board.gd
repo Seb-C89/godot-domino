@@ -22,6 +22,8 @@ func init(rows, cols, tile_offset, alea):
 	__tiles_offset = tile_offset
 	__alea = alea
 	generate()
+	get_node("Timer").connect("timeout", self, "on_Timer_timeout")
+	get_node("Timer").set_one_shot(true)
 
 
 # Called when the node enters the domino_scn tree for the first time.
@@ -87,10 +89,12 @@ func chain_add(domino):
 		if chain.front().__face == domino.__face:
 			chain.append(domino)
 			emit_signal("chain_grow", chain)
+			get_node("Timer").start(1)
 			print("chain x", chain.size())
 		else:
 			chain.clear()
 			emit_signal("chain_lost", chain)
+			get_node("Timer").stop()
 #			chain.append(__board[rowID][colID]) # When the chain is lost the last domino is hided ? Or it start a new chain ?
 #			emit_signal("chain_grow", chain)
 			print("chain lost")
@@ -98,12 +102,18 @@ func chain_add(domino):
 		print("first")
 		chain.append(domino)
 		emit_signal("chain_grow", chain)
+		get_node("Timer").start(1)
 
 
 func chain_timeout():
 	chain.clear()
 	emit_signal("chain_lost", chain)
+	get_node("Timer").stop()
 	print("chain timeout")
+
+
+func on_Timer_timeout():
+	print("TIMEOUT")
 
 
 func get_domino_index_from_position(domino):
