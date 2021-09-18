@@ -1,42 +1,40 @@
 extends Spatial
 
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
-var size
 
-# Called when the node enters the scene tree for the first time.
+var char_size
+
+
 func _ready():
-	size = get_node("Sprite3D").get_region_rect().size.x / get_node("Sprite3D").get_hframes() * 0.01
+	char_size = get_node("Sprite3D").get_region_rect().size.x / get_node("Sprite3D").get_hframes() * 0.01
 	print("size", get_node("Sprite3D").get_transformed_aabb().size)
 	print("size", get_node("Sprite3D").get_aabb().size)
-	pass # Replace with function body.
 
 
 func set_text(text):
-	erase() # TODO recycle child instead of delete them
 	var string = text.to_ascii()
-	for i in len(string):
-		var node = get_node("Sprite3D").duplicate()
-		add_child(node)
-		node.set_visible(true)
-		node.translate(Vector3(size*i, 0, 0))
-		node.set_frame(string[i]-32)
+	var diff = string.size() - (get_child_count()-1)
+	var update = min(string.size(), (get_child_count()-1))
 
-
-func update_text(text):
-	var string = text.to_ascii()
-	for i in len(string):
+	#Update existing chars
+	for i in update:
+		print("update char")
 		get_child(i+1).set_frame(string[i]-32)
-	pass
-
-
-func erase():
-	var childs = get_children()
-	childs.pop_front() # Do not delete the first child which is the original Srpite3D
-	for node in childs:
-		remove_child(node)
-		node.queue_free()
+		get_child(i+1).set_visible(true)
+	
+	if diff > 0:
+		#Add chars
+		for i in diff:
+			print("add char")
+			var node = get_node("Sprite3D").duplicate()
+			node.set_frame(string[i]-32)
+			node.translate(Vector3(char_size*i, 0, 0))
+			node.set_visible(true)
+			add_child(node)
+	else:
+		#Delete / Hide
+		for i in range (get_child_count() + diff, get_child_count()):
+			print("hide char")
+			get_child(i).set_visible(false)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
