@@ -3,7 +3,7 @@ extends Spatial
 
 signal chain_grow(chain)
 signal chain_lost(chain)
-
+signal chain_valid(chain)
 
 var __rows = 0
 var __cols = 0
@@ -89,7 +89,7 @@ func chain_add(domino):
 		if chain.front().__face == domino.__face:
 			chain.append(domino)
 			emit_signal("chain_grow", chain)
-			get_node("Timer").start(1)
+			get_node("Timer").start(2)
 			print("chain x", chain.size())
 		else:
 			chain.clear()
@@ -102,7 +102,7 @@ func chain_add(domino):
 		print("first")
 		chain.append(domino)
 		emit_signal("chain_grow", chain)
-		get_node("Timer").start(1)
+		get_node("Timer").start(2)
 
 
 func chain_timeout():
@@ -113,7 +113,20 @@ func chain_timeout():
 
 
 func on_Timer_timeout():
-	print("TIMEOUT")
+	print("on_timer_timeout")
+	var i = 1
+	while i < chain.size():
+		if chain[0].__face != chain[i].__face:
+			break
+		i += 1
+	print("i", i, "size", chain.size())	
+	if i == chain.size() && chain.size() > 1:
+		print("chain_VALID")
+		emit_signal("chain_valid", chain)
+	else:
+		print("chain_TIMEOUT")
+		emit_signal("chain_lost", chain)
+	chain.clear()
 
 
 func get_domino_index_from_position(domino):
