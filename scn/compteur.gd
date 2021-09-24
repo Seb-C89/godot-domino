@@ -16,10 +16,10 @@ func _ready():
 #	pass
 
 
-func connect_to_board(board:Node): # in future use player to connect the board
-	board.connect("chain_grow", self, "chain_grow")
-	board.connect("chain_lost", self, "chain_lost")
-	board.connect("chain_valid", self, "chain_valid")
+func connect_to_board(board):
+	board._chain.connect("chain_grow", self, "chain_grow")
+	board._chain.connect("chain_lost", self, "chain_lost")
+	board._chain.connect("chain_valid", self, "chain_valid")
 	get_node("Texte").set_text(score)
 	print("compteur connected")
 	
