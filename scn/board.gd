@@ -1,10 +1,5 @@
 extends Spatial
 
-
-signal chain_grow(chain)
-signal chain_lost(chain)
-signal chain_valid(chain)
-
 var __rows = 0
 var __cols = 0
 var __board = []
@@ -13,7 +8,7 @@ var __alea = null
 var __board_size = 0
 var __domino_size = 0
 
-var chain = []
+var _chain
 
 
 func init(rows, cols, tile_offset, alea):
@@ -22,8 +17,13 @@ func init(rows, cols, tile_offset, alea):
 	__tiles_offset = tile_offset
 	__alea = alea
 	generate()
-	get_node("Timer").connect("timeout", self, "on_Timer_timeout")
+	
+	_chain = Chain.new(get_node("Timer"))
+	_chain.connect("chain_lost", self, "on_chain_lost")
+	_chain.connect("chain_valid", self, "on_chain_valid")
+
 	get_node("Timer").set_one_shot(true)
+	get_node("Timer").connect("timeout", _chain, "on_timeout")
 
 
 # Called when the node enters the domino_scn tree for the first time.
@@ -80,53 +80,15 @@ func on_Domino_input_event(camera, event, click_position, click_normal, shape_id
 		if event.doubleclick:
 			get_domino_index_from_position(domino)
 			domino.flip()
-			chain_add(domino)
+			_chain.add(domino)
 
 
-func chain_add(domino):
-	if chain.size() > 0:
-		print(chain.front().__face, domino.__face)
-		if chain.front().__face == domino.__face:
-			chain.append(domino)
-			emit_signal("chain_grow", chain)
-			get_node("Timer").start(2)
-			print("chain x", chain.size())
-		else:
-			chain.clear()
-			emit_signal("chain_lost", chain)
-			get_node("Timer").stop()
-#			chain.append(__board[rowID][colID]) # When the chain is lost the last domino is hided ? Or it start a new chain ?
-#			emit_signal("chain_grow", chain)
-			print("chain lost")
-	else:
-		print("first")
-		chain.append(domino)
-		emit_signal("chain_grow", chain)
-		get_node("Timer").start(2)
+func on_chain_lost():
+	pass
 
 
-func chain_timeout():
-	chain.clear()
-	emit_signal("chain_lost", chain)
-	get_node("Timer").stop()
-	print("chain timeout")
-
-
-func on_Timer_timeout():
-	print("on_timer_timeout")
-	var i = 1
-	while i < chain.size():
-		if chain[0].__face != chain[i].__face:
-			break
-		i += 1
-	print("i", i, "size", chain.size())	
-	if i == chain.size() && chain.size() > 1:
-		print("chain_VALID")
-		emit_signal("chain_valid", chain)
-	else:
-		print("chain_TIMEOUT")
-		emit_signal("chain_lost", chain)
-	chain.clear()
+func on_chain_valid():
+	pass
 
 
 func get_domino_index_from_position(domino):
@@ -135,7 +97,76 @@ func get_domino_index_from_position(domino):
 	return[round(x), round(y)]
 
 
-#	TODO chain as class ?
+class Chain:
+
+	signal chain_grow(chain)
+	signal chain_lost(chain)
+	signal chain_valid(chain)
+	signal chain_discover(chain)
+	signal chain_discover_end(chain)
+
+	var _chain = []
+	var _timer
+
+	func _init(timer):
+		_timer = timer # Getting timer from board, because Timer class only work with node.
+
+	func add(domino):
+		if _chain.empty():
+			on_discover(domino)
+		else:
+			if _chain.back().__face == domino.__face:
+				on_grow(domino)
+			else:
+				on_broke()
+
+	func on_grow(domino):
+		_chain.append(domino)
+		_timer.start(2)
+		emit_signal("chain_grow", _chain)
+		print("on_grow()")
+		
+	func on_discover(domino):
+		_chain.append(domino)
+		_timer.start(2)
+		emit_signal("chain_discover", _chain)
+		print("on_discover()")
+
+	func on_timeout():
+		print("on_timeout()")
+		if _chain.size() == 1:
+			on_discover_end()
+		else:
+			if check():
+				on_valid()
+			else:
+				on_broke()
+
+	func check():
+		for i in _chain:
+			if _chain[0].__face != i.__face:
+				print("check() fail")
+				return false
+		print("check() pass")
+		return true
+
+	func on_broke():
+		emit_signal("chain_lost", _chain)
+		_chain.clear()
+		_timer.stop()
+		print("on_broke()")
+		
+	func on_discover_end():
+		emit_signal("chain_discover_end", _chain) # Emit signal before clear for #Compteur receive the chain not cleared
+		_chain.clear()
+		_timer.stop()
+		print("on_discover_end()")
+
+	func on_valid():
+		emit_signal("chain_valid", _chain) # Emit signal before clear for #Compteur receive the chain not cleared
+		_chain.clear()
+		_timer.stop()
+		print("on_valid()")
 
 
 #	https://discord.com/channels/667748228212457482/677940032535003136/861790618799702016
