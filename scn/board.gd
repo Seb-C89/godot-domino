@@ -21,6 +21,7 @@ func init(rows, cols, tile_offset, alea):
 	_chain = Chain.new(get_node("Timer"))
 	_chain.connect("chain_lost", self, "on_chain_lost")
 	_chain.connect("chain_valid", self, "on_chain_valid")
+	_chain.connect("chain_discover_end", self, "on_chain_discover_end")
 
 	get_node("Timer").set_one_shot(true)
 	get_node("Timer").connect("timeout", _chain, "on_timeout")
@@ -86,14 +87,17 @@ func on_Domino_input_event(camera, event, click_position, click_normal, shape_id
 func on_chain_lost(chain):
 	for i in chain:
 		i.flip()
-	pass
 
 
 func on_chain_valid(chain):
 	for i in chain:
 		i.flip()
 		i.set_face(__alea.randi_range(0, 9))
-	pass
+
+
+func on_chain_discover_end(chain):
+	for i in chain:
+		i.flip()
 
 
 func get_domino_index_from_position(domino):
@@ -117,22 +121,21 @@ class Chain:
 		_timer = timer # Getting timer from board, because Timer class only work with node.
 
 	func add(domino):
-		if _chain.empty():
-			on_discover(domino)
+		_chain.append(domino)
+		if _chain.size() == 1:
+			on_discover()
 		else:
-			if _chain.back().__face == domino.__face:
-				on_grow(domino)
+			if _chain.front().__face == domino.__face: # Do not use .back() ! because the domino is already append to the array so it is compared with itself !
+				on_grow()
 			else:
 				on_broke()
 
-	func on_grow(domino):
-		_chain.append(domino)
+	func on_grow():
 		_timer.start(2)
 		emit_signal("chain_grow", _chain)
 		print("on_grow()")
 		
-	func on_discover(domino):
-		_chain.append(domino)
+	func on_discover():
 		_timer.start(2)
 		emit_signal("chain_discover", _chain)
 		print("on_discover()")
@@ -156,7 +159,7 @@ class Chain:
 		return true
 
 	func on_broke():
-		emit_signal("chain_lost", _chain)
+		emit_signal("chain_lost", _chain) # Emit signal before clear for #Compteur receive the chain not cleared
 		_chain.clear()
 		_timer.stop()
 		print("on_broke()")
