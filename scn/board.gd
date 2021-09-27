@@ -83,11 +83,16 @@ func on_Domino_input_event(camera, event, click_position, click_normal, shape_id
 			_chain.add(domino)
 
 
-func on_chain_lost():
+func on_chain_lost(chain):
+	for i in chain:
+		i.flip()
 	pass
 
 
-func on_chain_valid():
+func on_chain_valid(chain):
+	for i in chain:
+		i.flip()
+		i.set_face(__alea.randi_range(0, 9))
 	pass
 
 
