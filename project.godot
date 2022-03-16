@@ -8,6 +8,16 @@
 
 config_version=4
 
+_global_script_classes=[ {
+"base": "Reference",
+"class": "chain",
+"language": "GDScript",
+"path": "res://scn/chain.gd"
+} ]
+_global_script_class_icons={
+"chain": ""
+}
+
 [application]
 
 config/name="Domino"

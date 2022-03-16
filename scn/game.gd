@@ -15,7 +15,8 @@ func _ready():
 	#var rng2 = RandomNumberGenerator.new()
 	#rng2.seed = rng.seed
 
-	get_node("Board").init(4, 5, 0.1, rng)
+	get_node("Board_1").init(4, 5, 0.1, rng)
+	get_node("Board_1/Compteur").connect_to_board(get_node("Board_1"))
 	
 #	get_node("Texte").set_text("Sebastien")
 #	get_node("Texte").update_text("AbCd")
