@@ -4,6 +4,7 @@ extends Spatial
 var __status = 1 #face visible (1) / face hidden (-1)
 var __face = 0 setget set_face
 var __face_offset = 0.1
+var initial_rotation_degree = Vector3(0, 0, 0)
 
 
 # Called when the node enters the scene tree for the first time.
@@ -22,24 +23,26 @@ func set_face(face):
 
 
 func _on_Area_mouse_entered():
-	pass
 	#print("entered")
-#	$Area.connect("input_event", self, "_on_Area_input_event")
+	initial_rotation_degree = rotation_degrees
+	$Area.connect("input_event", self, "_on_Area_input_event")
 
 
 func _on_Area_mouse_exited():
-	pass
 	#print("exited")
-#	$Area.disconnect("input_event", self, "_on_Area_input_event")
+	rotation_degrees = initial_rotation_degree
+	$Area.disconnect("input_event", self, "_on_Area_input_event")
 
 
 func _on_Area_input_event(camera, event, click_position, click_normal, shape_idx):
-	if event is InputEventMouseButton:
-		if event.doubleclick:
-			print("click click")
-			flip()
-#	if event is InputEventMouseMotion:
-#		print("move")
+	var distance_to_center = click_position - self.translation
+	
+	rotation_degrees = initial_rotation_degree + Vector3(distance_to_center.y, distance_to_center.x, distance_to_center.z)*Vector3(-10, 10, 0)
+
+	#if event is InputEventMouseMotion:
+	#	print("move", event.position, click_position)
+	#else:
+	#	print("event", event.position, click_position)
 
 
 func flip():
